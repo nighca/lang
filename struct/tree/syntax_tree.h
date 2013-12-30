@@ -1,11 +1,6 @@
 #ifndef _SYNTAX_TREE_H
 #define _SYNTAX_TREE_H
 
-#define TRUE 1
-#define FALSE 0
-
-typedef int Bool;
-
 typedef enum {
     CALC,
     ARGS,
