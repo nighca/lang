@@ -33,7 +33,6 @@ IdentifierPart ::
 
 ReservedWord ::
 	Keyword 
-	FutureReservedWord 
 
 Keyword ::
 	def		lamda
@@ -49,8 +48,8 @@ NumericLiteral ::
 
 DecimalLiteral ::
 	DecimalDigits 
-	DecimalDigits . DecimalDigits
-	. DecimalDigits
+	//DecimalDigits . DecimalDigits
+	//. DecimalDigits
  
 DecimalDigits ::
 	DecimalDigit 
