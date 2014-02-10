@@ -8,12 +8,14 @@ typedef struct {
 	union {
 		int num;
 		char* str;
+		char* name;
 	} data;
 
 	enum {
+		VALUE_TYPE_NULL,
 		VALUE_TYPE_NUM,
-		VALUE_TYPE_BOOL,
-		VALUE_TYPE_STRING
+		VALUE_TYPE_STRING,
+		VALUE_TYPE_LAMDA
 	} type;
 } Value;
 
@@ -28,11 +30,31 @@ typedef struct {
 	Node* root;
 } Tree;
 
+void printValue(Value* val){
+	switch(val->type){
+	case VALUE_TYPE_NUM:
+		printf("Val: %d, ", val->data.num);
+		break;
+	case VALUE_TYPE_NULL:
+		printf("Val: %s, ", "NULL");
+		break;
+	case VALUE_TYPE_STRING:
+		printf("Val: %s, ", val->data.str);
+		break;
+	case VALUE_TYPE_LAMDA:
+		printf("Val: %s, ", val->data.name);
+		break;
+	}
+}
+
 void printNode(Node* node, int depth){
 	for(int i = 0; i < depth; i++){
 		printf("\t");
 	}
-	printf("Type: %d, Val: %s, Children num: %d\n", node->val->type, node->val->data.str, node->childrenNum);
+
+	printf("Type: %d, ", node->val->type);
+	printValue(node->val);
+	printf("Children num: %d\n", node->childrenNum);
 
 	for(int j = 0; j < node->childrenNum; j++){
 		printNode(node->children[j], depth+1);
@@ -41,6 +63,7 @@ void printNode(Node* node, int depth){
 
 Value* newValue(){
 	Value* v = malloc(sizeof(Value));
+	v->type = VALUE_TYPE_NULL;
 	return v;
 }
 
@@ -66,7 +89,7 @@ int addChild(Node* parent, Node* child){
 	}
 
 	if(parent->children == NULL){
-		parent->children = malloc(sizeof(Node) * MAX_CHILDREN_NUM);
+		parent->children = malloc(sizeof(Node*) * MAX_CHILDREN_NUM);
 	}
 
 	parent->children[parent->childrenNum] = child;
@@ -75,6 +98,60 @@ int addChild(Node* parent, Node* child){
 	return 0;
 }
 
+int parseNum(char* input){
+	int n = 0;
+	char c;
 
+	while(c = *(input++)){
+		n *= 10;
+		n += (c - '0');
+	}
+	
+	return n;
+}
+
+char* parseStr(char* input){
+	char* str = malloc(sizeof(char) * MAX_STRING_LENGTH);
+	int i = 0;
+	for(; input[i+1]; i++){
+		str[i] = input[i+1];
+	}
+	str[--i] = '\0';
+
+	return str;
+}
+
+int callLamda(Value* lamda, Value** args, int argsNum, Value* result){
+	if(argsNum){
+		result->type = args[0]->type;
+		result->data = args[0]->data;
+	}else{
+		// do nothing
+	}
+
+	return 0;
+}
+
+Node* calc(Node* node){
+	//printValue(node->val);
+	//printf("\n");
+
+	if(node->val->type == VALUE_TYPE_NULL){
+		if(node->identifier){
+			node->val = getValFromContext()
+		}else if(node->childrenNum){
+			Value* lamda = node->children[0]->val;
+			int argsNum = node->childrenNum - 1;
+			Value** args = (Value**)malloc(sizeof(Value*) * argsNum);
+			for(int i = 0; i < argsNum; i++){
+				args[i] = calc(node->children[i+1])->val;
+			}
+
+			callLamda(lamda, args, argsNum, node->val);
+		}
+	}
+
+	return node;
+}
 
 #endif

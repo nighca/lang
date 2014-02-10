@@ -43,10 +43,19 @@ int resolve(TokenState** tokens, int left, Node* node){
 		}
 		break;
 	case TOKEN_STATE_IDENTIFIER:
-	case TOKEN_STATE_LITERAL:
-	case TOKEN_STATE_OPERATOR:
+		// get variable
+		return 1;
+	case TOKEN_STATE_DECIMAL_DIGITS:
+		node->val->type = VALUE_TYPE_NUM; 
+		node->val->data.num = parseNum(token->val);
+		return 1;
+	case TOKEN_STATE_STRING:
 		node->val->type = VALUE_TYPE_STRING; 
-		node->val->data.str = token->val;
+		node->val->data.str = parseStr(token->val);
+		return 1;
+	case TOKEN_STATE_OPERATOR:
+		node->val->type = VALUE_TYPE_LAMDA; 
+		node->val->data.name = token->val;
 		return 1;
 	}
 	return 0;
@@ -73,5 +82,6 @@ int main(int argc, const char * argv[]) {
 		}
 
 		printNode(tree->root, 0);
+		printNode(calc(tree->root), 0);
 	}
 }

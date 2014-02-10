@@ -17,5 +17,8 @@
 *.out
 *.app
 
-#VI
+#Vi
 *.swp
+
+#output
+o

@@ -8,7 +8,8 @@ typedef enum {
 	TOKEN_STATE_IDENTIFIER,
 	TOKEN_STATE_IDENTIFIER_START,
 	TOKEN_STATE_DECIMAL_DIGITS,
-	TOKEN_STATE_LITERAL,
+	TOKEN_STATE_STRING_HALF,
+	TOKEN_STATE_STRING,
 	TOKEN_STATE_OPERATOR,
 
 	TOKEN_STATE_LPT,
@@ -17,7 +18,8 @@ typedef enum {
 
 TokenType end[] = {
 	TOKEN_STATE_IDENTIFIER,
-	TOKEN_STATE_LITERAL,
+	TOKEN_STATE_DECIMAL_DIGITS,
+	TOKEN_STATE_STRING,
 	TOKEN_STATE_OPERATOR,
 	TOKEN_STATE_LPT,
 	TOKEN_STATE_RPT
@@ -94,9 +96,10 @@ int isCharDivider(char c){
 	return c == '\0' || c == '\n' || c == '\r' || c == ' ';
 }
 
-int changeTokenState(TokenState* s, char c){
-	printf("Deal: char: '%c', token: ", c);
-	printToken(s);
+int changeTokenState(TokenState* s, char* code, int pos){
+	char c = code[pos];
+	//printf("Deal: char: '%c', token: ", c);
+	//printToken(s);
 	switch(s->type){
 	case TOKEN_STATE_EMPTY:
 		if(isCharIdentifierStart(c)){
@@ -107,6 +110,11 @@ int changeTokenState(TokenState* s, char c){
 		if(isCharNum(c)){
 			pushCharToToken(s->val, c);
 			s->type = TOKEN_STATE_DECIMAL_DIGITS;
+			return 1;
+		}
+		if(c == '"'){
+			pushCharToToken(s->val, c);
+			s->type = TOKEN_STATE_STRING_HALF;
 			return 1;
 		}
 		if(c == '('){
@@ -147,11 +155,22 @@ int changeTokenState(TokenState* s, char c){
 		if(isCharNum(c)){
 			pushCharToToken(s->val, c);
 			return 1;
-		}else{
-			s->type = TOKEN_STATE_LITERAL;
 		}
 		break;
-	case TOKEN_STATE_LITERAL:
+	case TOKEN_STATE_STRING_HALF:
+		if(c == '\\'){
+			pushCharToToken(s->val, code[pos+1]);
+			return 2;
+		}else if(c == '"'){
+			pushCharToToken(s->val, c);
+			s->type = TOKEN_STATE_STRING;
+			return 1;
+		}else if(c){
+			pushCharToToken(s->val, c);
+			return 1;
+		}
+		break;
+	case TOKEN_STATE_STRING:
 		break;
 	case TOKEN_STATE_OPERATOR:
 		break;
@@ -175,12 +194,12 @@ int doParse(char* code, TokenState** results){
 	int i = 0, j = 0;
 	TokenState* token = newToken();
 	while(code[i]){
-		int step = changeTokenState(token, code[i]);
+		int step = changeTokenState(token, code, i);
 		i += step;
 		if(!step){
 			if(isTokenResolved(token)){
-				printf("Resolved: ");
-				printToken(token);
+				//printf("Resolved: ");
+				//printToken(token);
 				results[j++] = token;
 				token = newToken();
 			}else{
@@ -192,8 +211,8 @@ int doParse(char* code, TokenState** results){
 	}
 
 	if(isTokenResolved(token)){
-		printf("Resolved: ");
-		printToken(token);
+		//printf("Resolved: ");
+		//printToken(token);
 		results[j++] = token;
 	}
 
