@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../util/util.h"
 #include "token_parser.h"
 #include "syntax_parser.h"
-
-#define MAX_TOKEN_NUM 100
+#include "parser.h"
 
 int resolve(TokenState** tokens, int left, Node* node){
 	if(!left){
@@ -43,23 +43,31 @@ int resolve(TokenState** tokens, int left, Node* node){
 		}
 		break;
 	case TOKEN_STATE_IDENTIFIER:
-	case TOKEN_STATE_LITERAL:
-	case TOKEN_STATE_OPERATOR:
+		node->val->type = VALUE_TYPE_VAR; 
+		node->val->data = token->val;
+		return 1;
+	case TOKEN_STATE_DECIMAL_DIGITS:
+		node->val->type = VALUE_TYPE_NUM; 
+		node->val->data = token->val;
+		return 1;
+	case TOKEN_STATE_STRING:
 		node->val->type = VALUE_TYPE_STRING; 
-		node->val->data.str = token->val;
+		node->val->data = token->val;
+		return 1;
+	case TOKEN_STATE_OPERATOR:
+		node->val->type = VALUE_TYPE_LAMDA; 
+		node->val->data = token->val;
 		return 1;
 	}
 	return 0;
 }
 
-int main(int argc, const char * argv[]) {
+Tree* parse(char* code) {
 	TokenState* result[MAX_TOKEN_NUM];
-	char code[1000] = "";
-	gets(code);
-
 	int num;
+	Tree* tree = newTree();
+
 	if(num = doParse(code, result)){
-		Tree* tree = newTree();
 		int resolved = resolve(result, num, tree->root);
 
 		if(!resolved){
@@ -71,7 +79,17 @@ int main(int argc, const char * argv[]) {
 			// extra token
 			printf("Error: extra token!!!\n");
 		}
-
-		printNode(tree->root, 0);
 	}
+
+	return tree;
 }
+
+/*
+int main(int argc, const char * argv[]) {
+	char code[1000] = "";
+	gets(code);
+
+	Tree* tree = parse(code);
+	printNode(tree->root, 0);
+}
+*/
