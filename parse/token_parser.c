@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../util/util.h"
 #include "token_parser.h"
 
 TokenType end[] = {
