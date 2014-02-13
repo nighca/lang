@@ -89,6 +89,6 @@ int main(int argc, const char * argv[]) {
 	char code[1000] = "";
 	gets(code);
 
-	Tree tree = parse(code);
+	Tree* tree = parse(code);
 	printNode(tree->root, 0);
 }

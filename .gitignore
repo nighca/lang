@@ -21,4 +21,4 @@
 *.swp
 
 #output
-o
+build
