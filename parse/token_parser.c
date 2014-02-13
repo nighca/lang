@@ -3,6 +3,15 @@
 
 #include "token_parser.h"
 
+TokenType end[] = {
+	TOKEN_STATE_IDENTIFIER,
+	TOKEN_STATE_DECIMAL_DIGITS,
+	TOKEN_STATE_STRING,
+	TOKEN_STATE_OPERATOR,
+	TOKEN_STATE_LPT,
+	TOKEN_STATE_RPT
+};
+
 void printToken(TokenState* token){
 	printf("Type: %d, Val: '%s'\n", token->type, token->val);
 }

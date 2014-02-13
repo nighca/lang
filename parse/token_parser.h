@@ -17,15 +17,6 @@ typedef enum {
 	TOKEN_STATE_RPT
 } TokenType;
 
-TokenType end[] = {
-	TOKEN_STATE_IDENTIFIER,
-	TOKEN_STATE_DECIMAL_DIGITS,
-	TOKEN_STATE_STRING,
-	TOKEN_STATE_OPERATOR,
-	TOKEN_STATE_LPT,
-	TOKEN_STATE_RPT
-};
-
 typedef struct {
 	TokenType type;
 	char val[MAX_TOKEN_LENGTH];
