@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../parse/token_parser.h"
+#include "../parse/syntax_parser.h"
 #include "../parse/parser.h"
 #include "executor.h"
 
