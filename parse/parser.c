@@ -62,14 +62,12 @@ int resolve(TokenState** tokens, int left, Node* node){
 	return 0;
 }
 
-int main(int argc, const char * argv[]) {
+Tree* parse(char* code) {
 	TokenState* result[MAX_TOKEN_NUM];
-	char code[1000] = "";
-	gets(code);
-
 	int num;
+	Tree* tree = newTree();
+
 	if(num = doParse(code, result)){
-		Tree* tree = newTree();
 		int resolved = resolve(result, num, tree->root);
 
 		if(!resolved){
@@ -81,7 +79,16 @@ int main(int argc, const char * argv[]) {
 			// extra token
 			printf("Error: extra token!!!\n");
 		}
-
-		printNode(tree->root, 0);
 	}
+
+	return tree;
+}
+
+
+int main(int argc, const char * argv[]) {
+	char code[1000] = "";
+	gets(code);
+
+	Tree tree = parse(code);
+	printNode(tree->root, 0);
 }
