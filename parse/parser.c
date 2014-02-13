@@ -3,8 +3,7 @@
 
 #include "token_parser.h"
 #include "syntax_parser.h"
-
-#define MAX_TOKEN_NUM 100
+#include "parser.h"
 
 int resolve(TokenState** tokens, int left, Node* node){
 	if(!left){
@@ -84,7 +83,7 @@ Tree* parse(char* code) {
 	return tree;
 }
 
-
+/*
 int main(int argc, const char * argv[]) {
 	char code[1000] = "";
 	gets(code);
@@ -92,3 +91,4 @@ int main(int argc, const char * argv[]) {
 	Tree* tree = parse(code);
 	printNode(tree->root, 0);
 }
+*/
