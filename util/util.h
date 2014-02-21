@@ -1,5 +1,5 @@
-#ifndef _PARSER_H
-#define _PARSER_H
+#ifndef _UTIL_H
+#define _UTIL_H
 
 void assert(int condition, const char* message){
     if(!condition){
