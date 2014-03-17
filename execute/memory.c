@@ -2,6 +2,9 @@
 #include <stdlib.h>
 
 #include "../util/util.h"
+#include "../parse/token_parser.h"
+#include "../parse/syntax_parser.h"
+#include "../parse/parser.h"
 #include "memory.h"
 
 VM* newVM() {
@@ -65,6 +68,40 @@ Object* pushList(VM* vm, int length){
 	while(length--){
 		listPushItem(object, popObject(vm));
 	}
+	pushObject(vm, object);
+
+	return object;
+}
+
+Object* pushLamda(VM* vm, Node* lamdaNode){
+	Object* object = newObject(vm, OBJ_LAMDA);
+
+	assert(lamdaNode->childrenNum >= 2, "Error: Invalid lamda!");
+	int argsNum = object->argsNum = lamdaNode->childrenNum - 2;
+
+	for(int i = 0; i < argsNum; i++){
+		Node* argVal = lamdaNode->children[i + 1]->val;
+		if(argVal->type != VALUE_TYPE_VAR){
+			break;
+		}
+
+		char arg[MAX_TOKEN_LENGTH];
+		int j = 0;
+
+		for(char* name = argVal->data; name[j]; j++){
+			arg[j] = name[j];
+		}
+
+		assert(j < MAX_TOKEN_LENGTH, "Error: Too long token!");
+		arg[j] = '\0';
+
+		assert(i < MAX_ARGS_NUM, "Error: Too many args!");
+		object->args[i] = arg;
+	}
+
+	object->grammarTree = newTree();
+	object->grammarTree->root = lamdaNode->children[argsNum+1];
+
 	pushObject(vm, object);
 
 	return object;
