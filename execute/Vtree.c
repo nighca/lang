@@ -2,79 +2,81 @@
 #include <stdlib.h>
 
 #include "../util/util.h"
-#include "token_parser.h"
-#include "syntax_parser.h"
+#include "../util/tree.h"
+#include "../parse/token_parser.h"
+#include "../parse/syntax_parser.h"
 
-void printNode(Node* node, int depth){
+void printObject(Object* obj, int depth){
 	for(int i = 0; i < depth; i++){
 		printf("\t");
 	}
 
-	printf("Type: %d, ", node->val->type);
-	printf("Val: %s, ", node->val->data);
+	printf("Type: %d, ", obj->type);
+	switch(obj->type){
+		case OBJ_INT:
+			printf("Value: %d", obj->val);
+			break;
+
+		case OBJ_STRING:
+			printf("Value: %s", obj->str);
+			break;
+
+		case OBJ_LIST:
+			printf("Value: List(%d)", obj->length);
+			break;
+
+		case OBJ_LAMDA:
+			printf("Value: Lamda(%d)", obj->argsNum);
+			break;
+	}
+	printf("\n");
+};
+
+void printVnode(Vnode* node, int depth){
+	for(int i = 0; i < depth; i++){
+		printf("\t");
+	}
+
+	if(node->name){
+		printf("Name: %s, ", node->name);
+	}
+
+	if(node->obj){
+		printf("\n");
+		printObject(node->obj, depth);
+
+		for(int i = 0; i < depth; i++){
+			printf("\t");
+		}
+	}
 	printf("Children num: %d\n", node->childrenNum);
 
 	for(int j = 0; j < node->childrenNum; j++){
-		printNode(node->children[j], depth+1);
+		printVnode(node->children[j], depth+1);
 	}
 }
 
-Value* newValue(){
-	Value* v = malloc(sizeof(Value));
-	v->type = VALUE_TYPE_NULL;
-	return v;
-}
+Vnode* newVnode(){
+	Vnode* n = malloc(sizeof(Vnode));
+	n->obj = NULL;
+	n->node = NULL;
+	n->name = NULL;
 
-Node* newNode(){
-	Node* n = malloc(sizeof(Node));
-	n->children = NULL;
-	n->childrenNum = 0;
-	n->val = newValue();
+	_initNode(n);
+
 	return n;
 }
 
-Tree* newTree(){
-	Tree* t = malloc(sizeof(Tree));
-	t->root = newNode();
+Vtree* newVtree(){
+	Vtree* t = malloc(sizeof(Vtree));
+
+	_initTree(t, newVnode);
+
 	return t;
 }
 
-int addChild(Node* parent, Node* child){
-	if(parent->childrenNum >= MAX_CHILDREN_NUM){
-		// too many children
-		printf("Error: node has too many children!!!");
-		return 1;
-	}
-
-	if(parent->children == NULL){
-		parent->children = malloc(sizeof(Node*) * MAX_CHILDREN_NUM);
-	}
-
-	parent->children[parent->childrenNum] = child;
-	parent->childrenNum++;
+int addVchild(Vnode* parent, Vnode* child){
+	_addChild(parent, child, Vnode*, MAX_CHILDREN_NUM);
 
 	return 0;
 }
-
-/*int parseNum(char* input){
-	int n = 0;
-	char c;
-
-	while(c = *(input++)){
-		n *= 10;
-		n += (c - '0');
-	}
-	
-	return n;
-}
-
-char* parseStr(char* input){
-	char* str = malloc(sizeof(char) * MAX_STRING_LENGTH);
-	int i = 0;
-	for(; input[i+1]; i++){
-		str[i] = input[i+1];
-	}
-	str[--i] = '\0';
-
-	return str;
-}*/

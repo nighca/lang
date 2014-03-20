@@ -7,4 +7,6 @@ int strEqual(char* s1, char* s2);
 
 char* strCopy(char* from, char* to);
 
+int parseNum(char* input, int ary);
+
 #endif

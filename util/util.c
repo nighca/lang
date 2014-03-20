@@ -34,3 +34,15 @@ char* strCopy(char* from, char* to){
 
 	return to;
 }
+
+int parseNum(char* input, int ary){
+	int n = 0;
+	char c;
+
+	while(c = *(input++)){
+		n *= ary;
+		n += (c - '0');
+	}
+	
+	return n;
+}

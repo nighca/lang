@@ -64,6 +64,6 @@ Object* pushString(VM* vm, char* str);
 
 Object* pushList(VM* vm, int length);
 
-Object* listPushItem(Qbject* parent, Qbject* son);
+Object* listPushItem(Object* parent, Object* son);
 
 #endif

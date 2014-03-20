@@ -11,6 +11,7 @@ typedef struct _Vnode {
 
 	Object* obj;
 	Node* node;
+	char* name;
 } Vnode;
 
 typedef struct {

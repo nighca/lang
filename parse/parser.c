@@ -43,19 +43,19 @@ int resolve(TokenState** tokens, int left, Node* node){
 		}
 		break;
 	case TOKEN_STATE_IDENTIFIER:
-		node->val->type = VALUE_TYPE_VAR; 
+		node->val->type = VALUE_TYPE_VAR;
 		node->val->data = token->val;
 		return 1;
 	case TOKEN_STATE_DECIMAL_DIGITS:
-		node->val->type = VALUE_TYPE_NUM; 
+		node->val->type = VALUE_TYPE_NUM;
 		node->val->data = token->val;
 		return 1;
 	case TOKEN_STATE_STRING:
-		node->val->type = VALUE_TYPE_STRING; 
+		node->val->type = VALUE_TYPE_STRING;
 		node->val->data = token->val;
 		return 1;
 	case TOKEN_STATE_OPERATOR:
-		node->val->type = VALUE_TYPE_LAMDA; 
+		node->val->type = VALUE_TYPE_OP;
 		node->val->data = token->val;
 		return 1;
 	}

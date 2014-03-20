@@ -12,7 +12,7 @@ typedef struct {
 		VALUE_TYPE_NULL,
 		VALUE_TYPE_NUM,
 		VALUE_TYPE_STRING,
-		VALUE_TYPE_LAMDA,
+		VALUE_TYPE_OP,
 		VALUE_TYPE_VAR
 	} type;
 } Value;

@@ -1,7 +1,7 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
 
-#define MAX_VAR_NUM_IN_CONTEXT 100
+#define MAX_DEF_NUM_IN_CONTEXT 100
 
 
 typedef struct {
