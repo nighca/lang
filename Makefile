@@ -1,7 +1,7 @@
 run : build
-	cat code/l | ./build
+	./build code/l
 test : build
-	cat code/s | ./build
+	./build code/s
 build : parse/parser.c
 	cc -std=c99 -o build util/util.c parse/token_parser.c parse/syntax_parser.c parse/parser.c execute/memory.c execute/Vtree.c execute/context.c execute/executor.c
 clean :

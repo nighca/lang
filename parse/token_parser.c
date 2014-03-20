@@ -76,7 +76,7 @@ int isCharOperator(char c){
 }
 
 int isCharDivider(char c){
-	return c == '\0' || c == '\n' || c == '\r' || c == ' ';
+	return c == '\0' || c == '\n' || c == '\r' || c == '\t' || c == ' ';
 }
 
 int changeTokenState(TokenState* s, char* code, int pos){
