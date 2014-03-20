@@ -26,7 +26,7 @@ char* strCopy(char* from, char* to){
 	for(l = 0; from[l]; l++);
 
 	if(!to){
-		to = malloc(sizeof(char) * l);
+		to = malloc(sizeof(char) * (l + 1));
 		
 		int i = 0;
 		while(to[i] = from[i]) i++;
@@ -45,4 +45,20 @@ int parseNum(char* input, int ary){
 	}
 	
 	return n;
+}
+
+char* parseString(char* input){
+	int l;
+	for(l = 0; input[l]; l++);
+
+	char* result = malloc(sizeof(char) * (l - 1));
+
+	int i = 0;
+	for(; i < l - 2; i++){
+		result[i] = input[i+1];
+	}
+
+	result[i] = '\0';
+
+	return result;
 }

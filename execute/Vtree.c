@@ -5,6 +5,8 @@
 #include "../util/tree.h"
 #include "../parse/token_parser.h"
 #include "../parse/syntax_parser.h"
+#include "memory.h"
+#include "Vtree.h"
 
 void printObject(Object* obj, int depth){
 	for(int i = 0; i < depth; i++){
@@ -54,6 +56,8 @@ void printVnode(Vnode* node, int depth){
 	for(int j = 0; j < node->childrenNum; j++){
 		printVnode(node->children[j], depth+1);
 	}
+
+	printf("\n");
 }
 
 Vnode* newVnode(){

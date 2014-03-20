@@ -9,4 +9,6 @@ char* strCopy(char* from, char* to);
 
 int parseNum(char* input, int ary);
 
+char* parseString(char* input);
+
 #endif

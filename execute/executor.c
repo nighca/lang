@@ -10,12 +10,7 @@
 #include "context.h"
 #include "executor.h"
 
-VM* vm = newVM();
-Context* global = newContext();
-Context* contextStack[CALL_STACK_SIZE] = {global};
-int curr = 0;
-
-Object* getObject(Value* value){
+Object* getObject(Value* value, VM* vm){
 	Object* object = NULL;
 
 	switch(value->type){
@@ -27,7 +22,7 @@ Object* getObject(Value* value){
 			break;
 
 		case VALUE_TYPE_STRING:
-			object = pushString(vm, value->data);
+			object = pushString(vm, parseString(value->data));
 			break;
 
 		case VALUE_TYPE_OP:
@@ -36,49 +31,57 @@ Object* getObject(Value* value){
 		case VALUE_TYPE_VAR:
 			break;
 	}
+
+	return object;
 }
 
-Vnode* getVnode(Node* node){
+Vnode* getVnode(Node* node, VM* vm){
 	if(!node){
 		return NULL;
 	}
 
 	Vnode* n = newVnode();
 
-	n->obj = getObject(node->value);
+	n->obj = getObject(node->val, vm);
 
 	n->node = node;
 
-	if(node->value->type == VALUE_TYPE_OP || node->value->type == VALUE_TYPE_VAR){
-		n->name = strCopy(node->value->data, NULL);
+	if(node->val->type == VALUE_TYPE_OP || node->val->type == VALUE_TYPE_VAR){
+		n->name = strCopy(node->val->data, NULL);
 	}
 
 	for(int i = 0; i < node->childrenNum; i++){
-		addVchild(n, getVnode(node->children[i]));
+		addVchild(n, getVnode(node->children[i], vm));
 	}
 
 	return n;
 }
 
-Vtree* getVtree(Tree* tree){
+Vtree* getVtree(Tree* tree, VM* vm){
 	Vtree* t = newVtree();
 
-	t->root = getVnode(tree->root);
+	t->root = getVnode(tree->root, vm);
 }
 
-/*int main(int argc, const char * argv[]) {
+int main(int argc, const char * argv[]) {
 	char code[1000] = "";
 	gets(code);
 
+	VM* vm = newVM();
+	Context* global = newContext();
+	Context* contextStack[CALL_STACK_SIZE] = {global};
+	int curr = 0;
+
 	Tree* tree = parse(code);
 	printNode(tree->root, 0);
+	printVnode(getVnode(tree->root, vm), 0);
 }
-*/
 
-int calc(Node* expr){
+
+int calc(Vnode* expr, VM* vm){
 	
 };
 
-int execute(char* code){
+int execute(char* code, VM* vm){
 	return 0;
 }

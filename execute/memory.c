@@ -40,7 +40,7 @@ Object* newObject(VM* vm, ObjectType type){
 
 Object* pushInt(VM* vm, int val){
 	Object* object = newObject(vm, OBJ_INT);
-	object->val = intValue;
+	object->val = val;
 	pushObject(vm, object);
 
 	return object;
@@ -80,7 +80,7 @@ Object* pushLamda(VM* vm, Node* lamdaNode){
 	int argsNum = object->argsNum = lamdaNode->childrenNum - 2;
 
 	for(int i = 0; i < argsNum; i++){
-		Node* argVal = lamdaNode->children[i + 1]->val;
+		Value* argVal = lamdaNode->children[i + 1]->val;
 		if(argVal->type != VALUE_TYPE_VAR){
 			break;
 		}
@@ -107,7 +107,7 @@ Object* pushLamda(VM* vm, Node* lamdaNode){
 	return object;
 }
 
-int listPushItem(Qbject* parent, Qbject* son){
+int listPushItem(Object* parent, Object* son){
 	assert(parent->length < MAX_LIST_LENGTH, "Error: Too long list!");
 	parent->sons[parent->length++] = son;
 

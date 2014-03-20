@@ -3,14 +3,14 @@
 
 #define CALL_STACK_SIZE 100
 
-Object* getObject(Value* value);
+Object* getObject(Value* value, VM* vm);
 
-Vnode* getVnode(Node* node);
+Vnode* getVnode(Node* node, VM* vm);
 
-Vtree* getVtree(Tree* tree);
+Vtree* getVtree(Tree* tree, VM* vm);
 
-int calc(Node* expr);
+int calc(Vnode* expr, VM* vm);
 
-int execute(char* code);
+int execute(char* code, VM* vm);
 
 #endif

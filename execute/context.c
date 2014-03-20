@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "../util/util.h"
+#include "../parse/syntax_parser.h"
 #include "memory.h"
 #include "context.h"
 
@@ -31,7 +32,7 @@ int defineInContext(Context* context, char* key, Object* object){
 		}
 	}
 
-	assert(l < MAX_VAR_NUM_IN_CONTEXT, "Error: Too many vars in context!");
+	assert(l < MAX_DEF_NUM_IN_CONTEXT, "Error: Too many vars in context!");
 
 	context->names[l] = strCopy(key, NULL);
 	context->objs[l] = object;

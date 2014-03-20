@@ -24,6 +24,6 @@ Vnode* newVnode();
 
 Vtree* newVtree();
 
-int addChild(Vnode* parent, Vnode* child);
+int addVchild(Vnode* parent, Vnode* child);
 
 #endif
