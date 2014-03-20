@@ -1,11 +1,14 @@
-#ifndef _PARSER_H
-#define _PARSER_H
+#ifndef _UTIL_H
+#define _UTIL_H
 
-void assert(int condition, const char* message){
-    if(!condition){
-        printf("%s\n", message);
-        exit(1);
-    }
-}
+void assert(int condition, const char* message);
+
+int strEqual(char* s1, char* s2);
+
+char* strCopy(char* from, char* to);
+
+int parseNum(char* input, int ary);
+
+char* parseString(char* input);
 
 #endif

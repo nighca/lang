@@ -4,11 +4,13 @@
 #define STACK_MAX 256
 #define MAX_STRING_LENGTH 100
 #define MAX_LIST_LENGTH 100
+#define MAX_ARGS_NUM 100
 
 typedef enum {
 	OBJ_INT,
 	OBJ_STRING,
-	OBJ_LIST
+	OBJ_LIST,
+	OBJ_LAMDA
 } ObjectType;
 
 typedef struct _Object {
@@ -27,6 +29,13 @@ typedef struct _Object {
 		struct {
 			struct _Object* sons[MAX_LIST_LENGTH];
 			int length;
+		};
+
+		/* OBJ_LAMDA */
+		struct {
+			char* args[MAX_ARGS_NUM];
+			int argsNum;
+			Tree* grammarTree;
 		};
 	};
 } Object;
@@ -55,6 +64,6 @@ Object* pushString(VM* vm, char* str);
 
 Object* pushList(VM* vm, int length);
 
-Object* listPushItem(Qbject* parent, Qbject* son);
+int listPushItem(Object* parent, Object* son);
 
 #endif

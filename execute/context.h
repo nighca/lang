@@ -1,8 +1,14 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
 
-typedef struct {
+#define MAX_DEF_NUM_IN_CONTEXT 100
 
+
+typedef struct {
+	char* names[MAX_DEF_NUM_IN_CONTEXT];
+	Object* objs[MAX_DEF_NUM_IN_CONTEXT];
+
+	int varNum;
 } Context;
 
 Context* newContext();

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "../util/util.h"
+#include "../util/tree.h"
 #include "token_parser.h"
 #include "syntax_parser.h"
 
@@ -27,18 +28,28 @@ Value* newValue(){
 
 Node* newNode(){
 	Node* n = malloc(sizeof(Node));
-	n->children = NULL;
-	n->childrenNum = 0;
 	n->val = newValue();
+
+	_initNode(n);
+
 	return n;
 }
 
 Tree* newTree(){
 	Tree* t = malloc(sizeof(Tree));
-	t->root = newNode();
+
+	_initTree(t, newNode);
+
 	return t;
 }
 
+int addChild(Node* parent, Node* child){
+	_addChild(parent, child, Node, MAX_CHILDREN_NUM);
+
+	return 0;
+}
+
+/*
 int addChild(Node* parent, Node* child){
 	if(parent->childrenNum >= MAX_CHILDREN_NUM){
 		// too many children
@@ -55,6 +66,7 @@ int addChild(Node* parent, Node* child){
 
 	return 0;
 }
+*/
 
 /*int parseNum(char* input){
 	int n = 0;

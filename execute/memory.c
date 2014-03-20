@@ -2,6 +2,9 @@
 #include <stdlib.h>
 
 #include "../util/util.h"
+#include "../parse/token_parser.h"
+#include "../parse/syntax_parser.h"
+#include "../parse/parser.h"
 #include "memory.h"
 
 VM* newVM() {
@@ -37,7 +40,7 @@ Object* newObject(VM* vm, ObjectType type){
 
 Object* pushInt(VM* vm, int val){
 	Object* object = newObject(vm, OBJ_INT);
-	object->val = intValue;
+	object->val = val;
 	pushObject(vm, object);
 
 	return object;
@@ -70,7 +73,41 @@ Object* pushList(VM* vm, int length){
 	return object;
 }
 
-int listPushItem(Qbject* parent, Qbject* son){
+Object* pushLamda(VM* vm, Node* lamdaNode){
+	Object* object = newObject(vm, OBJ_LAMDA);
+
+	assert(lamdaNode->childrenNum >= 2, "Error: Invalid lamda!");
+	int argsNum = object->argsNum = lamdaNode->childrenNum - 2;
+
+	for(int i = 0; i < argsNum; i++){
+		Value* argVal = lamdaNode->children[i + 1]->val;
+		if(argVal->type != VALUE_TYPE_VAR){
+			break;
+		}
+
+		char arg[MAX_TOKEN_LENGTH];
+		int j = 0;
+
+		for(char* name = argVal->data; name[j]; j++){
+			arg[j] = name[j];
+		}
+
+		assert(j < MAX_TOKEN_LENGTH, "Error: Too long token!");
+		arg[j] = '\0';
+
+		assert(i < MAX_ARGS_NUM, "Error: Too many args!");
+		object->args[i] = arg;
+	}
+
+	object->grammarTree = newTree();
+	object->grammarTree->root = lamdaNode->children[argsNum+1];
+
+	pushObject(vm, object);
+
+	return object;
+}
+
+int listPushItem(Object* parent, Object* son){
 	assert(parent->length < MAX_LIST_LENGTH, "Error: Too long list!");
 	parent->sons[parent->length++] = son;
 
