@@ -65,7 +65,15 @@ Vtree* getVtree(Tree* tree, VM* vm){
 
 int main(int argc, const char * argv[]) {
 	char code[1000] = "";
-	gets(code);
+
+	FILE *fp = fopen(argv[1], "r");
+	int i = 0;
+	char c;
+	while((c = fgetc(fp)) != EOF){
+		code[i++] = c;
+	}
+	fclose(fp);
+	code[i] = '\0';
 
 	VM* vm = newVM();
 	Context* global = newContext();
