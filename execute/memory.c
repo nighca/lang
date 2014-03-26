@@ -38,6 +38,36 @@ Object* newObject(VM* vm, ObjectType type){
 	return object;
 }
 
+void printObject(Object* obj, int depth){
+	if(!obj){
+		printf("NULL");
+		return;
+	}
+
+	switch(obj->type){
+		case OBJ_INT:
+			printf("Int: %d", obj->val);
+			break;
+
+		case OBJ_STRING:
+			printf("String: %s", obj->str);
+			break;
+
+		case OBJ_LIST:
+			printf("List: [%d]", obj->length);
+			break;
+
+		case OBJ_LAMDA:
+			printf("Lamda[%d]: (%d)", obj->lamdaId, obj->argsNum);
+			//printNode(obj->grammarTree->root, 0);
+			break;
+	}
+};
+
+Object* cloneObject(VM* vm, Object* obj){
+	return obj;
+}
+
 Object* pushInt(VM* vm, int val){
 	Object* object = newObject(vm, OBJ_INT);
 	object->val = val;
@@ -85,18 +115,9 @@ Object* pushLamda(VM* vm, Node* lamdaNode){
 			break;
 		}
 
-		char arg[MAX_TOKEN_LENGTH];
-		int j = 0;
-
-		for(char* name = argVal->data; name[j]; j++){
-			arg[j] = name[j];
-		}
-
-		assert(j < MAX_TOKEN_LENGTH, "Error: Too long token!");
-		arg[j] = '\0';
-
 		assert(i < MAX_ARGS_NUM, "Error: Too many args!");
-		object->args[i] = arg;
+
+		object->args[i] = strCopy(argVal->data, NULL);
 	}
 
 	object->grammarTree = newTree();

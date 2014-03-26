@@ -72,7 +72,7 @@ int isCharIdentifierPart(char c){
 }
 
 int isCharOperator(char c){
-	return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '&' || c == '|' || c == '!' || c == '=' || c == '^';
+	return c == '+' || c == '-' || c == '*' || c == '/' || c == '\\' || c == '%' || c == '&' || c == '|' || c == '!' || c == '=' || c == '^' || c == '$';
 }
 
 int isCharDivider(char c){

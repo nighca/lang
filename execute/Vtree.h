@@ -12,6 +12,7 @@ typedef struct _Vnode {
 	Object* obj;
 	Node* node;
 	char* name;
+	bool isMethod;
 } Vnode;
 
 typedef struct {
