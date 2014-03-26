@@ -1,25 +1,31 @@
 #ifndef _METHOD_H
 #define _METHOD_H
 
-char* nativeMthods = {
-	"def",
-	"lamda",
-	"add",
-	"minus",
-	"multiply",
-	"divide"
-};
+#define getArgs(argNum, nodes, args) \
+{ \
+	args = malloc(sizeof(Object*) * (argNum)); \
+	for(int i = 0; i < (argNum); i++){ \
+		calc((nodes)[i+1], vm, contexts, methods); \
+		//args[i] = cloneObject(vm, (nodes)[i]->obj, NULL); \
+		args[i] = (nodes)[i+1]->obj; \
+	} \
+}
 
-int def(Node** args, Node* result);
+typedef struct {
+	char* name;
+	Object* (*callee)(int, Object**, VM*);
+} Method;
 
-int lamda(Node** args, Node* result);
+Method* defineMethod(char* name, Object* (*callee)(int, Object**, VM*));
 
-int add(Node** args, Node* result);
+Object* method_add(int argNum, Object** args, VM* vm);
 
-int minus(Node** args);
+Object* method_minus(int argNum, Object** args, VM* vm);
 
-int multiply(Node** args);
+Object* method_multiply(int argNum, Object** args, VM* vm);
 
-int divide(Node** args);
+Object* method_divide(int argNum, Object** args, VM* vm);
+
+Object* method_last(int argNum, Object** args, VM* vm);
 
 #endif

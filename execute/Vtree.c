@@ -8,50 +8,21 @@
 #include "memory.h"
 #include "Vtree.h"
 
-void printObject(Object* obj, int depth){
-	for(int i = 0; i < depth; i++){
-		printf("\t");
-	}
-
-	printf("Type: %d, ", obj->type);
-	switch(obj->type){
-		case OBJ_INT:
-			printf("Value: %d", obj->val);
-			break;
-
-		case OBJ_STRING:
-			printf("Value: %s", obj->str);
-			break;
-
-		case OBJ_LIST:
-			printf("Value: List(%d)", obj->length);
-			break;
-
-		case OBJ_LAMDA:
-			printf("Value: Lamda(%d)", obj->argsNum);
-			break;
-	}
-	printf("\n");
-};
-
 void printVnode(Vnode* node, int depth){
-	for(int i = 0; i < depth; i++){
-		printf("\t");
-	}
 
 	if(node->name){
+		printTab(depth);
 		printf("Name: %s, ", node->name);
+		printf("\n");
 	}
 
 	if(node->obj){
-		printf("\n");
+		printTab(depth);
 		printObject(node->obj, depth);
-
-		for(int i = 0; i < depth; i++){
-			printf("\t");
-		}
+		printf("\n");
 	}
-	printf("Children num: %d\n", node->childrenNum);
+	printTab(depth);
+	printf("Children num: %d\n\n", node->childrenNum);
 
 	for(int j = 0; j < node->childrenNum; j++){
 		printVnode(node->children[j], depth+1);
@@ -65,6 +36,7 @@ Vnode* newVnode(){
 	n->obj = NULL;
 	n->node = NULL;
 	n->name = NULL;
+	n->isMethod = false;
 
 	_initNode(n);
 

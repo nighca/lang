@@ -10,7 +10,8 @@ typedef enum {
 	OBJ_INT,
 	OBJ_STRING,
 	OBJ_LIST,
-	OBJ_LAMDA
+	OBJ_LAMDA,
+	OBJ_METHOD
 } ObjectType;
 
 typedef struct _Object {
@@ -33,6 +34,7 @@ typedef struct _Object {
 
 		/* OBJ_LAMDA */
 		struct {
+			int lamdaId;
 			char* args[MAX_ARGS_NUM];
 			int argsNum;
 			Tree* grammarTree;
@@ -58,11 +60,17 @@ Object* pop(VM* vm);
 
 Object* newObject(VM* vm, ObjectType type);
 
+void printObject(Object* obj, int depth);
+
+Object* cloneObject(VM* vm, Object* obj);
+
 Object* pushInt(VM* vm, int val);
 
 Object* pushString(VM* vm, char* str);
 
 Object* pushList(VM* vm, int length);
+
+Object* pushLamda(VM* vm, Node* lamdaNode);
 
 int listPushItem(Object* parent, Object* son);
 
