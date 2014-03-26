@@ -1,6 +1,24 @@
-( +
-	1
-	(* 2 3)  
-	(len "sss")
-	(2)
+(\
+	($ a 1)
+	($
+		adda
+		(lamda
+			i
+			(+ i a)
+		)
+	)
+	($
+		minusa
+		(lamda
+			i
+			(- i a)
+		)
+	)
+	($ a 2)
+	($
+		b
+		(adda 3)
+	)
+	($ a 1)
+	(minusa b)
 )
